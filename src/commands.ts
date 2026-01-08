@@ -87,6 +87,35 @@ async function openAdjacentNote(
   plugin.openPeriodicNote(activeFileMeta.granularity, adjacentDate);
 }
 
+async function generateFutureNotes(
+  plugin: PeriodicNotesPlugin,
+  granularity: Granularity
+): Promise<void> {
+  const config = plugin.calendarSetManager.getActiveConfig(granularity);
+  const weeksInAdvance = config.weeksInAdvance || 0;
+
+  if (weeksInAdvance <= 0) {
+    new Notice("Please configure 'Weeks in Advance' in settings first");
+    return;
+  }
+
+  let created = 0;
+  for (let i = 0; i <= weeksInAdvance; i++) {
+    const date = window.moment().add(i, granularity);
+    const existingNote = plugin.getPeriodicNote(granularity, date);
+
+    if (!existingNote) {
+      await plugin.createPeriodicNote(granularity, date);
+      created++;
+    }
+  }
+
+  const periodicity = displayConfigs[granularity].periodicity;
+  new Notice(
+    `Created ${created} future ${periodicity} note${created !== 1 ? "s" : ""}`
+  );
+}
+
 export function getCommands(
   app: App,
   plugin: PeriodicNotesPlugin,
@@ -94,7 +123,7 @@ export function getCommands(
 ): Command[] {
   const config = displayConfigs[granularity];
 
-  return [
+  const commands: Command[] = [
     {
       id: `open-${config.periodicity}-note`,
       name: config.labelOpenPresent,
@@ -150,4 +179,18 @@ export function getCommands(
       },
     },
   ];
+
+  // Add "Generate future notes" command for weekly notes if configured
+  if (granularity === "week") {
+    const periodicConfig = plugin.calendarSetManager.getActiveConfig(granularity);
+    if (periodicConfig.weeksInAdvance && periodicConfig.weeksInAdvance > 0) {
+      commands.push({
+        id: `generate-future-${config.periodicity}-notes`,
+        name: `Generate future ${config.periodicity} notes`,
+        callback: () => generateFutureNotes(plugin, granularity),
+      });
+    }
+  }
+
+  return commands;
 }

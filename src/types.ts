@@ -21,6 +21,7 @@ export interface PeriodicConfig {
   format: string;
   folder: string;
   templatePath?: string;
+  weeksInAdvance?: number;
 }
 
 export interface CalendarSet {

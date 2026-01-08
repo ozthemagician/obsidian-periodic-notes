@@ -14,6 +14,7 @@
   import type { Writable } from "svelte/store";
   import writableDerived from "svelte-writable-derived";
   import OpenAtStartupSetting from "src/settings/components/OpenAtStartupSetting.svelte";
+  import WeeksInAdvanceSetting from "src/settings/components/WeeksInAdvanceSetting.svelte";
 
   export let app: App;
   export let calendarSetId: string;
@@ -91,6 +92,9 @@
       <NoteFolderSetting {app} {config} {granularity} />
       <NoteTemplateSetting {app} {config} {granularity} />
       <OpenAtStartupSetting {config} {settings} {granularity} />
+      {#if granularity === "week"}
+        <WeeksInAdvanceSetting {config} {granularity} />
+      {/if}
     </div>
   {/if}
 </div>
