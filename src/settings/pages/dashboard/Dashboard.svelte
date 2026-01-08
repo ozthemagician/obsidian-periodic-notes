@@ -46,13 +46,13 @@
   function handleWeekStartChange(e: Event): void {
     const val = (e.target as HTMLSelectElement)?.value;
     $localization.weekStart = val as import("src/settings/index").IWeekStartOption;
-    app.vault.setConfig("weekStart", val);
+    app.vault.setConfig("weekStart", val as import("src/settings/index").IWeekStartOption);
   }
 
   function handleLocaleChange(e: Event): void {
     const val = (e.target as HTMLSelectElement)?.value;
     $localization.localeOverride = val;
-    app.vault.setConfig("weekStart", val);
+    app.vault.setConfig("localeOverride", val);
   }
 
   onMount(() => {
