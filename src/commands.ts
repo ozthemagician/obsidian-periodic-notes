@@ -100,7 +100,7 @@ async function generateFutureNotes(
   }
 
   let created = 0;
-  for (let i = 0; i <= weeksInAdvance; i++) {
+  for (let i = 1; i <= weeksInAdvance; i++) {
     const date = window.moment().add(i, granularity);
     const existingNote = plugin.getPeriodicNote(granularity, date);
 
