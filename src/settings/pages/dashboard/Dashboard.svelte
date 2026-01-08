@@ -43,6 +43,18 @@
     });
   }
 
+  function handleWeekStartChange(e: Event): void {
+    const val = (e.target as HTMLSelectElement)?.value;
+    $localization.weekStart = val as import("src/settings/index").IWeekStartOption;
+    app.vault.setConfig("weekStart", val);
+  }
+
+  function handleLocaleChange(e: Event): void {
+    const val = (e.target as HTMLSelectElement)?.value;
+    $localization.localeOverride = val;
+    app.vault.setConfig("weekStart", val);
+  }
+
   onMount(() => {
     setIcon(addEl, "plus", 16);
   });
@@ -103,11 +115,7 @@
     slot="control"
     options={getWeekStartOptions()}
     value={$localization.weekStart}
-    onChange={(e) => {
-      const val = e.target.value;
-      $localization.weekStart = val;
-      app.vault.setConfig("weekStart", val);
-    }}
+    onChange={handleWeekStartChange}
   />
 </SettingItem>
 
@@ -121,11 +129,7 @@
     slot="control"
     options={getLocaleOptions()}
     value={$localization.localeOverride}
-    onChange={(e) => {
-      const val = e.target.value;
-      $localization.localeOverride = val;
-      app.vault.setConfig("weekStart", val);
-    }}
+    onChange={handleLocaleChange}
   />
 </SettingItem>
 

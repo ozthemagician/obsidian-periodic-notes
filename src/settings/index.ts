@@ -27,6 +27,9 @@ export interface ISettings {
   calendarSets: CalendarSet[];
 
   enableTimelineComplication: boolean;
+
+  localeOverride: ILocaleOverride;
+  weekStart: IWeekStartOption;
 }
 
 export const DEFAULT_SETTINGS: ISettings = {
